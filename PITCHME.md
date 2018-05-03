@@ -227,3 +227,137 @@ Error: Project.turds defined in resolvers, but not in schema
 # Graph is Good
 
 ---
+
+## Client Side
+
+### Set Up
+
+---
+
+#### Easy Peasy Lemon Squeezy
+
+```js
+import React from 'react';
+import { ApolloProvider } from 'react-apollo';
+
+function ApolloContainer({ children }: Props) {
+  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+}
+```
+
+---
+
+#### Difficult Difficult Lemon Difficult
+
+```js
+import { ApolloClient } from 'apollo-boost';
+import { ApolloLink } from 'apollo-link';
+import { createUploadLink } from 'apollo-upload-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
+const authLink = setContext((_, { headers }) =>
+  getAccessToken().then((accessToken) =>
+    getGraphUrl().then((graphUrl) => ({
+      uri: graphUrl,
+      headers: {
+        ...headers,
+        Authorization: accessToken ? `Bearer ${accessToken}` : '',
+      },
+    }))
+  )
+);
+
+const link = ApolloLink.from([authLink, createUploadLink()]);
+
+const client = new ApolloClient({
+  link,
+  cache: new InMemoryCache(),
+  dataIdFromObject: (o) => o.id,
+});
+```
+
+---
+
+## Querying Data
+
+---
+
+#### Tasks Query
+
+Fetch all the tasks for a project
+
+```js
+import { gql } from 'apollo-boost';
+
+const TasksQuery = gql`
+  query TasksQuery($projectId: Int!) {
+    tasks(projectId: $projectId) {
+      id
+      title
+      position
+      taskList {
+        title
+      }
+      iconAsset: {
+        styles: {
+          original
+        }
+      }
+    }
+  }
+`;
+```
+
+---
+
+### Query Component
+
+```js
+import React from 'react';
+import { Query } from 'react-apollo';
+import { gql } from 'apollo-boost';
+import TaskListing from './TaskListing';
+import LoadingManager from '../LoadingManager';
+
+const TasksQuery = gql`
+  ...
+`;
+
+function TaskListingContainer({ projectId }: Props) {
+  return (
+    <Query query={TasksListsQuery} variables={{ projectId }}>
+      {LoadingManager(TaskListing)}
+    </Query>
+  );
+}
+
+export default TaskListingContainer;
+```
+
+---
+
+### What is this LoadingManager?
+
+```js
+const LoadingManager = (ChildComponent, props) => ({
+  loading,
+  error,
+  data,
+}) => {
+  if (loading) {
+    return <div>Loading</div>;
+  }
+
+  if (error) {
+    return <div>An unexpected error occurred</div>;
+  }
+
+  return <ChildComponent {...data} {...props} />;
+};
+```
+
+---
+
+## Mutating Data
+
+---
