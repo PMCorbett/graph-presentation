@@ -447,3 +447,22 @@ Might get hard to keep track of where these are being called
   }}
 </Mutation>
 ```
+
+---
+
+## What is missing?
+
+---
+
+#### Tests
+
+@div[small]
+There are currently no tests for the Apollo containers
+<br /><br />
+There seems to be a bazillion different approaches for mocking the Apollo provider
+<br /><br />
+There also seems to be a large amount of people that say if you separate concerns
+correctly the Apollo containers will be so small as to be not all that important to test
+@divend
+
+![Shrug](https://media0.giphy.com/media/XeXzWgD6P4LG8/giphy.gif)
