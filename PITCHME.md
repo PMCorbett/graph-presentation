@@ -1,11 +1,11 @@
-# Graph
+# GraphQL
 
 ---
 
 @div[left-50]
 
 @div
-Graph API
+GraphQL API
 @divend
 
 @ul
@@ -35,7 +35,7 @@ Forge
 
 ---
 
-## Graph
+## GraphQL
 
 ### What are we using
 
@@ -76,7 +76,7 @@ graphQLServer.use(
 
 ---
 
-### Graph - Basic Patterns
+### GraphQL - Basic Patterns
 
 #### Schema
 
@@ -230,7 +230,7 @@ Error: Project.turds defined in resolvers, but not in schema
 
 ---
 
-# Graph is Good
+# GraphQL is Good
 
 ---
 
@@ -394,7 +394,7 @@ import Task from './Task';
 
 const updateTask = gql`...`;
 
-function SortTasksWithMutation({ task }) {
+function UpdateTaskWithMutation({ task }) {
   return (
     <Mutation mutation={updateTask} refetchQueries={['TasksQuery']}>
       {(onSubmit) => {
@@ -416,10 +416,34 @@ function SortTasksWithMutation({ task }) {
 
 ---
 
-### Things to note
+## Things to note
 
-* Links can be synchronous or asynchronous
-  * very useful for fetching / refreshing credentials
-* `refetchQueries` on Mutations
-  * very useful if you edit one thing and need a list to update
-  * might get hard to keep track of where these are being called
+---
+
+### Links can be synchronous or asynchronous
+
+Very useful for fetching / refreshing credentials
+
+```js
+const authLink = setContext((_, { headers }) =>
+  getAccessToken().then((accessToken) =>
+    getGraphUrl().then((graphUrl) => ({ ... }))
+  )
+);
+```
+
+---
+
+### **refetchQueries** on Mutations
+
+Very useful if you edit one thing and need a list to update
+
+Might get hard to keep track of where these are being called
+
+```js
+<Mutation mutation={updateTask} refetchQueries={['TasksQuery']}>
+  {(onSubmit) => {
+    ...
+  }}
+</Mutation>
+```
