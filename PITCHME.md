@@ -49,9 +49,15 @@ Its an express server using Apollo's express plugin
 
 Apollo Upload express gives us the ability to send files as part of GraphQL Mutations
 
-+++
+---
 
 ```js
+import express from 'express';
+import { graphqlExpress } from 'apollo-server-express';
+import { apolloUploadExpress } from 'apollo-upload-server';
+
+const graphQLServer = express();
+
 graphQLServer.use(
   '/graphql',
   secure,
@@ -77,7 +83,7 @@ graphQLServer.use(
 The most important part of the GraphQL API is arguably the schema, it contains all
 the type definitions for our entities.
 
-+++
+---
 
 ```js
 import { makeExecutableSchema } from 'graphql-tools';
@@ -125,7 +131,7 @@ Resolvers are where we tie our schema to where we can find our schema. Resolvers
 an object that mirror the schema. When you start the server and there is a mismatch
 between what is defined in the resolver and in the schema it will shout at you.
 
-+++
+---
 
 ```js
 import RestConnector from './connectors';
@@ -160,7 +166,7 @@ Connector at the minute, but we could have any connector we would like, in the
 future, eg. a local database. This means the front end apps would not have to
 care where any data is stored, and access it through the same mechanism.
 
-+++
+---
 
 ```js
 import { signAssetCollection } from './signAsset';
@@ -199,7 +205,7 @@ const RestConnector = ({ authHeader }: { authHeader: string }) => {
 
 * No end to end test to check an entity can be queried or mutated against the business API
 
-+++
+---
 
 ### What is there?
 
@@ -361,3 +367,59 @@ const LoadingManager = (ChildComponent, props) => ({
 ## Mutating Data
 
 ---
+
+### Update Task Mutation
+
+```js
+import { gql } from 'apollo-boost';
+
+const updateTask = gql`
+  mutation updateTask($id: Int!, $task: TaskUpdate!) {
+    updateTask(id: $id, task: $task) {
+      id
+    }
+  }
+`;
+```
+
+---
+
+### Mutation Component
+
+```js
+import React from 'react';
+import { Mutation } from 'react-apollo';
+import { gql } from 'apollo-boost';
+import Task from './Task';
+
+const updateTask = gql`...`;
+
+function SortTasksWithMutation({ task }) {
+  return (
+    <Mutation mutation={updateTask} refetchQueries={['TasksQuery']}>
+      {(onSubmit) => {
+        onChange = ({ task }) => {
+          onSubmit({
+            variables: {
+              id: task.id,
+              task,
+            },
+          });
+        };
+
+        return <Task onChange={onChange} task={task} />;
+      }}
+    </Mutation>
+  );
+}
+```
+
+---
+
+### Things to note
+
+* Links can be synchronous or asynchronous
+  * very useful for fetching / refreshing credentials
+* `refetchQueries` on Mutations
+  * very useful if you edit one thing and need a list to update
+  * might get hard to keep track of where these are being called
