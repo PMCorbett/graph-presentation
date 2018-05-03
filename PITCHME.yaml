@@ -1,7 +1,7 @@
 
 theme : night
 
-layout : center-right
+layout : center
 
 theme-override : PITCHME.css
 

@@ -2,34 +2,54 @@
 
 ---
 
-<div class="left">
-## Graph API
+@div[left-50]
+
+@div
+Graph API
+@divend
+
+@ul
 
 * What are we using?
 * Basic Patterns
 * What is missing?
+  @ulend
 
-  </div>
-</div class="right">
-## Forge
+  @divend
+
+@div[right-50]
+
+@div
+Forge
+@divend
+
+@ul
 
 * How is it set up
 * How to query
 * How to mutate
 * What is dodgy?
-  </div>
+  @ulend
+
+  @divend
 
 ---
 
-# Graph - What are we using
+## Graph
 
-## Apollo Server Express
+### What are we using
+
+---
+
+#### Apollo Server Express
 
 Its an express server using Apollo's express plugin
 
-### Apollo Upload express
+#### Apollo Upload express
 
 Apollo Upload express gives us the ability to send files as part of GraphQL Mutations
+
++++
 
 ```js
 graphQLServer.use(
@@ -50,12 +70,14 @@ graphQLServer.use(
 
 ---
 
-# Graph - Basic Patterns
+### Graph - Basic Patterns
 
-## Schema
+#### Schema
 
 The most important part of the GraphQL API is arguably the schema, it contains all
 the type definitions for our entities.
+
++++
 
 ```js
 import { makeExecutableSchema } from 'graphql-tools';
@@ -97,11 +119,13 @@ const schema = ({ authHeader }) =>
 
 ---
 
-# Graph - resolvers
+#### Resolvers
 
 Resolvers are where we tie our schema to where we can find our schema. Resolvers return
 an object that mirror the schema. When you start the server and there is a mismatch
 between what is defined in the resolver and in the schema it will shout at you.
+
++++
 
 ```js
 import RestConnector from './connectors';
@@ -129,12 +153,14 @@ const resolvers = ({ authHeader }: { authHeader: string }) => {
 
 ---
 
-# Graph - Connectors
+#### Connectors
 
 Connectors connect to the actual data and the GraphQL API. We only have a Rest
 Connector at the minute, but we could have any connector we would like, in the
 future, eg. a local database. This means the front end apps would not have to
 care where any data is stored, and access it through the same mechanism.
+
++++
 
 ```js
 import { signAssetCollection } from './signAsset';
@@ -163,19 +189,21 @@ const RestConnector = ({ authHeader }: { authHeader: string }) => {
 
 ---
 
-# What is missing?
+### What is missing?
 
-## Unit Tests
+#### Unit Tests
 
 * No unit tests for the Rest Connector
 
-## Integration Tests
+#### Integration Tests
 
 * No end to end test to check an entity can be queried or mutated against the business API
 
-# What is there?
++++
 
-## Integration Test
+### What is there?
+
+#### Integration Test
 
 ```js
 test('the schema is valid', () => {
