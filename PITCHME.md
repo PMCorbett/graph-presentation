@@ -1,17 +1,23 @@
 # Graph
 
+---
+
+<div class="left">
 ## Graph API
 
 * What are we using?
 * Basic Patterns
 * What is missing?
 
+  </div>
+</div class="right">
 ## Forge
 
 * How is it set up
 * How to query
 * How to mutate
 * What is dodgy?
+  </div>
 
 ---
 

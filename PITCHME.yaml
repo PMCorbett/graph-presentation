@@ -1,0 +1,16 @@
+
+theme : night
+
+layout : center-right
+
+theme-override : PITCHME.css
+
+transition : none
+
+highlight : ir-black
+
+charts : true
+
+mathjax : TeX-AMS_HTML-full
+
+published : true
